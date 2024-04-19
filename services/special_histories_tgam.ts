@@ -2,7 +2,7 @@
  * Custom class for TGAM histories issue.
  * This class handles the special histories for TGAM, where there are 2 different branches: default and feeds.
  */
-import { ReadJsonFile } from "../utilities/get_list_of_records_in_json";
+import { ReadJsonFile } from "../utilities/mongo/get_list_of_records_in_json";
 import {StoryApi} from "./story_api_requests"
 import equal from 'fast-deep-equal';
 

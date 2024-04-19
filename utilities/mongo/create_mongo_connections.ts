@@ -2,7 +2,7 @@ import { Db, MongoClient, Collection } from 'mongodb';
 
 export class MongoConnection {
     private mongo_string: string;
-    private mongo_client: MongoClient
+    private mongo_client: MongoClient | null = null;
     private mongo_db: Db | null = null;
 
     constructor(mongo_string: string, is_srv: boolean) {
@@ -11,9 +11,11 @@ export class MongoConnection {
         }else{
             this.mongo_string = `mongodb://${mongo_string}`
         }
+        this.mongo_client = null;
     }
 
-    public async createMongoClient() {
+
+    async createMongoClient() {
         if(!this.mongo_client){
             this.mongo_client = await MongoClient.connect(this.mongo_string)
         }
@@ -35,7 +37,7 @@ export class MongoConnection {
     }
 
     public async getAllCollectionNames(): Promise<string[]> {
-        let collection_names = [];
+        let collection_names:string[] = [];
         (await (await this.getMongoConnectionDb()).collections()).map((collection) => {
             collection_names.push(collection.collectionName);
         });
@@ -44,5 +46,9 @@ export class MongoConnection {
 
     public async getAllCollections(): Promise<Collection[]> {
         return await (await this.getMongoConnectionDb()).collections()
+    }
+
+    public async getACollectionByName(collection_name: string): Promise<Collection> {
+        return (await this.getMongoConnectionDb()).collection(collection_name)
     }
 }
