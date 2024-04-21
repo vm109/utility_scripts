@@ -1,4 +1,4 @@
-import { Db, MongoClient, Collection } from 'mongodb';
+import { Db, MongoClient, Collection, Filter } from 'mongodb';
 
 export class MongoConnection {
     private mongo_string: string;
@@ -23,7 +23,7 @@ export class MongoConnection {
     }
 
     public async getMongoConnectionDb(): Promise<Db> {
-        if (!this.mongo_db) {
+        if (!this.mongo_db || !this.mongo_client) {
             const client = await this.createMongoClient()
             this.mongo_db = client.db();
         }
@@ -50,5 +50,12 @@ export class MongoConnection {
 
     public async getACollectionByName(collection_name: string): Promise<Collection> {
         return (await this.getMongoConnectionDb()).collection(collection_name)
+    }
+
+    public async getDocumentByQuery(collection_name:string, query: Filter<any>): Promise<any> {
+        if(!this.mongo_client || !this.mongo_db){
+            await this.getMongoConnectionDb()
+        }
+        return await (await this.getACollectionByName(collection_name)).findOne(query);
     }
 }
