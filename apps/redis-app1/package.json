@@ -1,0 +1,15 @@
+{
+    "name": "redis-app1",
+    "version": "1.0.0",
+    "description": "A Redis app",
+    "main": "redis_app1_index.ts",
+    "scripts": {
+        "start": "ts-node redis_app1_index.ts"
+    },
+    "dependencies": {
+        "@types/redis": "^4.0.11",
+        "redis": "^3.1.2"
+    },
+    "author": "vm109",
+    "license": "MIT"
+}
